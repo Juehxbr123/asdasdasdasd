@@ -1,0 +1,48 @@
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>TON Connect Demo</title>
+  <script src="https://unpkg.com/@tonconnect/sdk@latest/dist/tonconnect-sdk.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+  <style>
+    body { background: #0098EA; font-family: 'Press Start 2P', cursive; text-align: center; padding-top: 100px; color: white; }
+    button { padding: 16px 32px; background: #ff4747; color: white; border: none; border-radius: 10px; font-size: 18px; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
+    #walletAddress { margin-top: 20px; font-size: 14px; }
+  </style>
+</head>
+<body>
+
+  <h1>🎮 Connect TON Wallet</h1>
+  <button id="connectWalletBtn">Войти с TON</button>
+  <p id="walletAddress"></p>
+
+  <script>
+    const tonConnect = new TonConnectSDK.TonConnect({
+      manifestUrl: 'https://juehxbr123.github.io/asdasd/tonconnect-manifest.json'
+    });
+
+    document.getElementById('connectWalletBtn').addEventListener('click', async () => {
+      try {
+        const wallet = await tonConnect.connect();
+        const address = wallet.account.address;
+        console.log('Кошелек подключен:', address);
+        document.getElementById('walletAddress').textContent = '✅ Подключено: ' + address;
+      } catch (error) {
+        console.error('Ошибка подключения:', error);
+        document.getElementById('walletAddress').textContent = '❌ Ошибка подключения';
+      }
+    });
+
+    (async () => {
+      await tonConnect.restoreConnection();
+      const wallet = tonConnect.wallet;
+      if (wallet) {
+        document.getElementById('walletAddress').textContent = '✅ Подключено: ' + wallet.account.address;
+      }
+    })();
+  </script>
+
+</body>
+</html>
